@@ -1,6 +1,5 @@
 package com.study.board.service;
 
-import com.study.board.BoardApplication;
 import com.study.board.entity.Board;
 import com.study.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     // 글 작성 처리
-    public void write(Board board){
+    public void boardWrite(Board board){
 
         boardRepository.save(board);
     }
@@ -28,5 +27,11 @@ public class BoardService {
     // 특정 게시글 불러오기
     public Board boardView(Integer id){
         return boardRepository.findById(id).get();
+    }
+
+    // 특정 게시물 삭제
+
+    public void boardDelete(Integer id){
+        boardRepository.deleteById(id);
     }
 }
