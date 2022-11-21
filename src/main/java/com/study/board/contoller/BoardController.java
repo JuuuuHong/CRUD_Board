@@ -22,9 +22,9 @@ public class BoardController {
     @PostMapping("/board/writepro")
     public String boardWritePro(Board board, Model model){
         boardService.boardWrite(board);
-        model.addAttribute("message", "글 작성이 완료되었습니다");
+        model.addAttribute("writemessage", "글 작성이 완료되었습니다");
         model.addAttribute("searchUrl", "/board/list");
-        return "message";
+        return "writemessage";
     }
 
     @GetMapping("/board/list")
@@ -43,9 +43,12 @@ public class BoardController {
     }
 
     @GetMapping("/board/delete")
-       public String boardDelete(Integer id){
+       public String boardDelete(Integer id, Model model){
         boardService.boardDelete(id);
-        return "redirect:/board/list";
+        model.addAttribute("deletemessage", "글 삭제가 완료되었습니다");
+        model.addAttribute("searchUrl", "/board/list");
+        // return "redirect:/board/list";
+        return "deletemessage";
     }
 
     @GetMapping("/board/modify/{id}")
