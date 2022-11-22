@@ -31,6 +31,11 @@
       </tr>
       </tbody>
     </table>
+
+    <th: block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+      <a th:if="${page != newPage}" th:href="@{/board/list(page = ${page - 1})}" th:text="${page}"></a>
+      <strong th:if="${page == newPage}" th:text="${page}" style="color : red"></strong>
+    </th:>
   </div>
 </body>
 </html>
