@@ -59,13 +59,16 @@ public class BoardController {
     }
 
     @PostMapping("/board/update/{id}")
-    public String boardupdate(@PathVariable("id") Integer id, Board board){
+    public String boardupdate(@PathVariable("id") Integer id, Board board, Model model){
         Board boardTemp = boardService.boardView(id);
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
 
+        model.addAttribute("modifymessage", "수정이 완료되었습니다.");
+        model.addAttribute("searchUrl", "/board/list");
+
         boardService.boardWrite(boardTemp);
 
-        return "redirect:/board/list";
+        return "modifymessage";
     }
 }
