@@ -2,6 +2,7 @@ package com.study.board.contoller;
 
 import com.study.board.entity.Board;
 import com.study.board.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
-public class BoardController {
+@RequiredArgsConstructor
+public class BoardController{
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
     @GetMapping("/board/write")
     public String boardWriteForm(){
         return "boardwrite";
@@ -36,10 +37,17 @@ public class BoardController {
     }
 
     @GetMapping("/board/list")
-    public String boardList(Model model, @PageableDefault(page = 0, size = 10, sort="id",
-            direction = Sort.Direction.DESC) Pageable pageable){
+    public String boardList(Model model,
+                            @PageableDefault(page = 0, size = 10, sort="id", direction = Sort.Direction.DESC) Pageable pageable,
+                            String searchKeyword){
 
-        Page<Board> list = boardService.boardList(pageable);
+        Page<Board> list = null;
+
+        if(searchKeyword == null){
+            list = boardService.boardList(pageable);
+        } else {
+            list = boardService.boardSearchList(searchKeyword, pageable);
+        }
 
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
@@ -50,7 +58,6 @@ public class BoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
-        model.addAttribute("list", boardService.boardList(pageable));
 
         return "boardlist";
     }
